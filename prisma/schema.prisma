@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model clientes {
+  id               String     @id @db.Uuid
+  tipo_documento   String     @db.VarChar(20)
+  numero_documento String     @db.VarChar(20)
+  nombre           String     @db.VarChar(150)
+  telefono         String     @db.VarChar(30)
+  direccion        String     @db.VarChar(200)
+  email            String     @db.VarChar(150)
+  fecha_creacion   DateTime?  @default(now()) @db.Timestamp(6)
+  facturas         facturas[]
+}
+
+model detalle_factura {
+  id              String    @id @db.Uuid
+  factura_id      String    @db.Uuid
+  producto_id     String    @db.Uuid
+  cantidad        Int
+  precio_unitario Decimal   @db.Decimal(12, 2)
+  iva_unitario    Decimal   @db.Decimal(12, 2)
+  subtotal        Decimal   @db.Decimal(12, 2)
+  facturas        facturas  @relation(fields: [factura_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_factura")
+  productos       productos @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_producto")
+}
+
+model facturas {
+  id              String            @id @db.Uuid
+  numero_factura  String            @unique @db.VarChar(50)
+  cliente_id      String            @db.Uuid
+  usuario_id      String            @db.Uuid
+  fecha_emision   DateTime?         @default(now()) @db.Timestamp(6)
+  subtotal        Decimal           @db.Decimal(12, 2)
+  iva_total       Decimal           @db.Decimal(12, 2)
+  total           Decimal           @db.Decimal(12, 2)
+  estado          String?           @default("BORRADOR") @db.VarChar(20)
+  detalle_factura detalle_factura[]
+  clientes        clientes          @relation(fields: [cliente_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_factura_cliente")
+  usuarios        usuarios          @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_factura_usuario")
+}
+
+model productos {
+  id              String            @id @db.Uuid
+  codigo          String            @unique @db.VarChar(50)
+  nombre          String            @db.VarChar(150)
+  descripcion     String?
+  precio          Decimal           @db.Decimal(12, 2)
+  porcentaje_iva  Decimal?          @default(19) @db.Decimal(5, 2)
+  activo          Boolean?          @default(true)
+  detalle_factura detalle_factura[]
+}
+
+model usuarios {
+  id             String     @id @db.Uuid
+  nombre         String     @db.VarChar(100)
+  email          String     @db.VarChar(150)
+  password_hash  String
+  rol            String     @db.VarChar(20)
+  fecha_creacion DateTime?  @default(now()) @db.Timestamp(6)
+  facturas       facturas[]
+}
