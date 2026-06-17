@@ -10,13 +10,6 @@ const {
     eliminarProducto
 } = require('../controllers/productos.controller');
 
-console.log('Productos controller cargado:', {
-    obtenerProductos,
-    obtenerProductoPorId,
-    crearProducto,
-    actualizarProducto,
-    eliminarProducto
-});
 
 router.get('/', obtenerProductos);
 
