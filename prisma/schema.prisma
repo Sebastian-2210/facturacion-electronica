@@ -58,11 +58,11 @@ model productos {
 }
 
 model usuarios {
-  id             String     @id @db.Uuid
-  nombre         String     @db.VarChar(100)
-  email          String     @db.VarChar(150)
+  id             String    @id @db.Uuid
+  nombre         String    @db.VarChar(100)
+  email          String    @unique @db.VarChar(150)
   password_hash  String
-  rol            String     @db.VarChar(20)
-  fecha_creacion DateTime?  @default(now()) @db.Timestamp(6)
+  rol            String    @db.VarChar(20)
+  fecha_creacion DateTime? @default(now()) @db.Timestamp(6)
   facturas       facturas[]
 }

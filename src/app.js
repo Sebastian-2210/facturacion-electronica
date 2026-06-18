@@ -5,6 +5,7 @@ const clientesRoutes = require('./routes/clientes.routes');
 const productosRoutes = require('./routes/productos.routes');
 const facturasRoutes = require('./routes/facturas.routes');
 const usuariosRoutes = require('./routes/usuarios.routes');
+const authRoutes = require('./routes/auth.routes');
 
 
 const app = express();
@@ -16,9 +17,11 @@ app.get('/test', (req, res) => {
     res.send('TEST OK');
 });
 
+
 app.use('/api/clientes', clientesRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/facturas', facturasRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/auth', authRoutes);
 
 module.exports = app;

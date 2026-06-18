@@ -2,16 +2,22 @@ const express = require('express');
 
 const router = express.Router();
 
+const { verificarToken } = require('../middlewares/auth.middleware');
+
 const {
-    obtenerFacturas,
-    obtenerFacturaPorId,
-    crearFactura
+
+obtenerFacturas,
+
+obtenerFacturaPorId,
+
+crearFactura
+
 } = require('../controllers/facturas.controller');
 
-router.get('/', obtenerFacturas);
+router.get('/', verificarToken, obtenerFacturas);
 
-router.get('/:id', obtenerFacturaPorId);
+router.get('/:id', verificarToken, obtenerFacturaPorId);
 
-router.post('/', crearFactura);
+router.post('/', verificarToken, crearFactura);
 
 module.exports = router;
