@@ -42,7 +42,26 @@ const login = async (req, res) => {
     }
 };
 
+const obtenerPerfil = async (req, res) => {
+
+    try {
+
+        res.json({
+            usuario: req.usuario
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            mensaje: 'Error al obtener perfil'
+        });
+    }
+};
+
 module.exports = {
     register,
-    login
+    login,
+    obtenerPerfil
 };
